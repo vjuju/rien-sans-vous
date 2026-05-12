@@ -1,15 +1,612 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rien Sans Vous</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rien Sans Vous — 2027</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="2027 se jouera sur les réseaux sociaux. Préparons la riposte.">
+    <link rel="preload" href="/fonts/Folsom-Black.otf" as="font" type="font/otf" crossorigin>
+    <link rel="icon" href="/assets/LogoOEP.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/LogoOEP.png">
+    <style>
+        @font-face {
+            font-family: 'Folsom';
+            src: url('/fonts/Folsom-Black.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background: #000;
+            color: #fff;
+        }
+
+        body {
+            font-family: 'Folsom', Impact, sans-serif;
+            min-height: 100dvh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 20px 24px;
+            position: relative;
+            z-index: 200;
+        }
+
+        .navbar-brand {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(14px, 3.2vw, 22px);
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: block;
+            justify-self: end;
+        }
+
+        /* ── Gate (password) ── */
+        #gate {
+            min-height: calc(100dvh - 90px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            gap: 28px;
+        }
+
+        .gate-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(38px, 10vw, 90px);
+            color: #5ECBA1;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .gate-sub {
+            font-family: Arial, sans-serif;
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: #ccc;
+            max-width: 420px;
+            line-height: 1.5;
+        }
+
+        .gate-form {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .gate-input-wrapper {
+            background: #5ECBA1;
+            border-radius: 50px;
+            padding: 16px 28px;
+            box-shadow: 6px 6px 0 0 #fff;
+        }
+
+        .gate-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            text-align: center;
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: 22px;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .gate-input::placeholder {
+            color: rgba(0, 0, 0, 0.55);
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .gate-button {
+            background: #fff;
+            color: #000;
+            border: 2px solid #333;
+            border-radius: 12px;
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: 22px;
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .gate-button:hover {
+            background: #5ECBA1;
+        }
+
+        .gate-error {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #ff6b6b;
+            min-height: 1em;
+        }
+
+        /* ── Main funnel ── */
+        #funnel {
+            display: none;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 10px 24px 80px;
+        }
+
+        body.unlocked #funnel {
+            display: block;
+        }
+
+        body.unlocked #gate {
+            display: none;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+
+        .hero-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(36px, 7.5vw, 70px);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: #fff;
+        }
+
+        .hero-title .green {
+            color: #5ECBA1;
+            display: block;
+        }
+
+        .hero-sub {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(20px, 3.5vw, 30px);
+            color: #fff;
+            margin-top: 18px;
+            line-height: 1.2;
+        }
+
+        .intro {
+            font-family: Arial, sans-serif;
+            font-size: clamp(15px, 2.2vw, 18px);
+            color: #ddd;
+            line-height: 1.6;
+            margin: 30px auto;
+            max-width: 640px;
+        }
+
+        .intro p + p {
+            margin-top: 16px;
+        }
+
+        .intro strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .intro .green {
+            color: #5ECBA1;
+            font-weight: 700;
+        }
+
+        .victories {
+            border: 1px solid rgba(94, 203, 161, 0.4);
+            background: rgba(94, 203, 161, 0.08);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 24px auto;
+            max-width: 640px;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.55;
+            color: #fff;
+        }
+
+        .victories-label {
+            display: block;
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            color: #5ECBA1;
+            margin-bottom: 10px;
+        }
+
+        .victories ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .victories li {
+            padding: 6px 0 6px 22px;
+            position: relative;
+        }
+
+        .victories li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #5ECBA1;
+            font-weight: 700;
+        }
+
+        /* ── Section dividers ── */
+        .section-header {
+            text-align: center;
+            margin: 60px 0 24px;
+        }
+
+        .section-eyebrow {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(28px, 5vw, 44px);
+            line-height: 1.05;
+            color: #fff;
+        }
+
+        .section-title .arrow {
+            color: #5ECBA1;
+            margin-right: 12px;
+        }
+
+        .section-kicker {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        /* ── Cards ── */
+        .tiers {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tier {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .tier:hover {
+            border-color: #5ECBA1;
+            transform: translateY(-2px);
+        }
+
+        .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tier-name {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(22px, 3.5vw, 30px);
+            color: #5ECBA1;
+            line-height: 1;
+        }
+
+        .tier-price {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(18px, 3vw, 24px);
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .tier-condition {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: -4px;
+        }
+
+        .tier-desc {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.55;
+            color: #ddd;
+        }
+
+        .tier-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            align-self: flex-start;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: 18px;
+            padding: 12px 22px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tier-cta:hover {
+            background: #5ECBA1;
+        }
+
+        .tier-cta .emoji {
+            margin-left: 10px;
+        }
+
+        .tier.tier-green .tier-cta {
+            background: #5ECBA1;
+        }
+
+        .tier.tier-green .tier-cta:hover {
+            background: #4ab896;
+        }
+
+        /* ── Urgency block ── */
+        .urgency {
+            margin: 70px auto 0;
+            max-width: 640px;
+            text-align: center;
+            padding: 32px 24px;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+
+        .urgency-title {
+            font-family: 'Folsom', Impact, sans-serif;
+            font-size: clamp(26px, 4.5vw, 38px);
+            color: #5ECBA1;
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+        .urgency-text {
+            font-family: Arial, sans-serif;
+            font-size: clamp(15px, 2.2vw, 18px);
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .urgency-text strong {
+            color: #5ECBA1;
+            font-weight: 700;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 30px 20px 10px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-  <main>
-    <h1>Rien Sans Vous</h1>
-    <p>Bientot disponible sur riensansvous.fr</p>
-  </main>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a class="navbar-brand" href="/">#RIENSANSVOUS</a>
+        </div>
+        <div></div>
+        <img src="/assets/LogoOEP.png" alt="On Est Prêt" class="navbar-logo">
+    </nav>
+
+    <!-- Gate -->
+    <section id="gate">
+        <h1 class="gate-title">RIEN SANS VOUS</h1>
+        <p class="gate-sub">Cet espace est confidentiel.<br> Entre le mot de passe qui t'a été transmis pour accéder à la page.</p>
+        <form class="gate-form" id="gateForm" autocomplete="off">
+            <div class="gate-input-wrapper">
+                <input
+                    type="password"
+                    id="gateInput"
+                    class="gate-input"
+                    placeholder="mot de passe"
+                    autocomplete="off"
+                    spellcheck="false"
+                    autofocus
+                >
+            </div>
+            <button type="submit" class="gate-button">ENTRER</button>
+            <div class="gate-error" id="gateError" role="alert" aria-live="polite"></div>
+        </form>
+    </section>
+
+    <!-- Funnel -->
+    <main id="funnel">
+        <header class="hero">
+            <h1 class="hero-title">
+                2027 SE JOUERA
+                <span class="green">SUR LES RÉSEAUX SOCIAUX.</span>
+            </h1>
+            <p class="hero-sub">Préparons la riposte.</p>
+        </header>
+
+        <div class="intro">
+            <p>Pendant que l'extrême droite déverse <strong>50 millions de vues par semaine</strong>, les idées progressistes se font écraser dans l'algorithme. Pas faute d'avoir raison. Faute d'avoir une force de frappe organisée.</p>
+            <p>On en construit une. <span class="green">De nombreuses victoires au compteur.</span> Maintenant, on change d'échelle.</p>
+        </div>
+<!--
+        <div class="victories">
+            <span class="victories-label">NOS 3 VICTOIRES</span>
+            <ul>
+                <li>[Cas concret #1 — à compléter]</li>
+                <li>[Cas concret #2 — à compléter]</li>
+                <li>[Cas concret #3 — à compléter]</li>
+            </ul>
+        </div>
+-->
+        <!-- AMPLIFIER -->
+        <div class="section-header">
+            <div class="section-eyebrow">Deux manières de s'engager</div>
+            <h2 class="section-title"><span class="arrow">→</span>AMPLIFIER</h2>
+            <p class="section-kicker">Engagement en temps · à partir de 10€/mois</p>
+        </div>
+
+        <div class="tiers">
+            <div class="tier tier-green">
+                <div class="tier-header">
+                    <div class="tier-name">Relayeur·se</div>
+                    <div class="tier-price">10€/mois</div>
+                </div>
+                <p class="tier-desc">Tu reçois sur Discord les contenus prioritaires de la semaine. <strong>2 min, 3 clics, impact massif quand on est 10 000.</strong></p>
+                <a class="tier-cta" href="#" data-helloasso="relayeur" target="_blank" rel="noopener">JE DEVIENS RELAYEUR·SE<span class="emoji">📣</span></a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-header">
+                    <div class="tier-name">Créateur·rice</div>
+                    <div class="tier-price">sur invitation</div>
+                </div>
+                <div class="tier-condition">à partir de 50 000 abonnés</div>
+                <p class="tier-desc">Tu reçois des briefs éditoriaux et des données exclusives pour produire tes propres contenus.</p>
+                <a class="tier-cta" href="#" data-helloasso="createur" target="_blank" rel="noopener">JE REJOINS LE CERCLE<span class="emoji">🎙️</span></a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-header">
+                    <div class="tier-name">Cercle des voix</div>
+                    <div class="tier-price">sur invitation</div>
+                </div>
+                <div class="tier-condition">à partir de 200 000 abonnés</div>
+                <p class="tier-desc">Boucle WhatsApp directe avec l'équipe stratégique, coordination des grosses séquences.</p>
+                <a class="tier-cta" href="#" data-helloasso="cercle-voix" target="_blank" rel="noopener">JE PRENDS CONTACT<span class="emoji">📡</span></a>
+            </div>
+        </div>
+
+        <!-- FINANCER -->
+        <div class="section-header">
+            <h2 class="section-title"><span class="arrow">→</span>FINANCER</h2>
+            <p class="section-kicker">Engagement ressources</p>
+        </div>
+
+        <div class="tiers">
+            <div class="tier">
+                <div class="tier-header">
+                    <div class="tier-name">Lecteur·rice stratégique</div>
+                    <div class="tier-price">50€</div>
+                </div>
+                <p class="tier-desc">Tu reçois la <strong>lettre stratégique mensuelle</strong> : analyses, coulisses, prochains coups.</p>
+                <a class="tier-cta" href="#" data-helloasso="don-50" target="_blank" rel="noopener">JE FINANCE 50€<span class="emoji">✉️</span></a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-header">
+                    <div class="tier-name">Soutien</div>
+                    <div class="tier-price">500€</div>
+                </div>
+                <p class="tier-desc">Invitation aux <strong>points stratégiques trimestriels</strong> en visio.</p>
+                <a class="tier-cta" href="#" data-helloasso="don-500" target="_blank" rel="noopener">JE FINANCE 500€<span class="emoji">🎥</span></a>
+            </div>
+
+            <div class="tier">
+                <div class="tier-header">
+                    <div class="tier-name">Allié·e</div>
+                    <div class="tier-price">2 000€</div>
+                </div>
+                <p class="tier-desc">Accès au <strong>rapport détaillé des opérations</strong> + invitation au lancement annuel.</p>
+                <a class="tier-cta" href="#" data-helloasso="don-2000" target="_blank" rel="noopener">JE DEVIENS ALLIÉ·E<span class="emoji">🤝</span></a>
+            </div>
+
+            <div class="tier tier-green">
+                <div class="tier-header">
+                    <div class="tier-name">Cercle stratégique</div>
+                    <div class="tier-price">10 000€ et +</div>
+                </div>
+                <p class="tier-desc">Boucle WhatsApp avec le <strong>noyau de commandement</strong>, co-décision sur les axes prioritaires.</p>
+                <a class="tier-cta" href="#" data-helloasso="don-10000" target="_blank" rel="noopener">JE REJOINS LE CERCLE<span class="emoji">⚡</span></a>
+            </div>
+        </div>
+
+        <!-- Urgency -->
+        <div class="urgency">
+            <div class="urgency-title">POURQUOI MAINTENANT ?</div>
+            <p class="urgency-text">Les programmes des candidat·es se figent.<br> Dans <strong>12 mois</strong>, il sera trop tard.</p>
+        </div>
+
+        <footer class="footer">
+            © Rien Sans Vous · On Est Prêt
+        </footer>
+    </main>
+
+    <script>
+        (function () {
+            var PASSWORD = 'JEMENGAGE';
+            var STORAGE_KEY = 'rsv_unlocked';
+
+            function unlock() {
+                document.body.classList.add('unlocked');
+                try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+                window.scrollTo(0, 0);
+            }
+
+            if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+                unlock();
+            }
+
+            var form = document.getElementById('gateForm');
+            var input = document.getElementById('gateInput');
+            var error = document.getElementById('gateError');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var value = (input.value || '').trim().toUpperCase();
+                if (value === PASSWORD) {
+                    error.textContent = '';
+                    unlock();
+                } else {
+                    error.textContent = 'Mot de passe incorrect.';
+                    input.value = '';
+                    input.focus();
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
